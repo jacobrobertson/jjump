@@ -1,11 +1,11 @@
 package com.robestone.jjump.jacob;
 
-import java.awt.event.KeyEvent;
 
-import com.robestone.jjump.EdgeBehavior;
-import com.robestone.jjump.PolygonSprite;
-
-public class JozenPoly extends PolygonSprite {
+public class JozenPoly {
+	
+	/*
+	extends PolygonSprite {
+}
 
 	public JozenPoly(String name) {
 		super(name);
@@ -33,4 +33,5 @@ public class JozenPoly extends PolygonSprite {
 		int newyv=-yv;
 		setVelocity(newxv, newyv);
 	}
+	*/
 }

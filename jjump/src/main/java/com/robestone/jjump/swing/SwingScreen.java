@@ -6,24 +6,28 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.net.URL;
 import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import com.robestone.jjump.Costume;
 import com.robestone.jjump.GameRunner;
-import com.robestone.jjump.ImageSprite;
+import com.robestone.jjump.ImageCostume;
 import com.robestone.jjump.MoveDecider;
-import com.robestone.jjump.OvalSprite;
+import com.robestone.jjump.OvalCostume;
 import com.robestone.jjump.Paintable;
+import com.robestone.jjump.PolygonCostume;
 import com.robestone.jjump.PolygonPaintable;
-import com.robestone.jjump.PolygonSprite;
 import com.robestone.jjump.Room;
 import com.robestone.jjump.Rule;
 import com.robestone.jjump.Screen;
 import com.robestone.jjump.SimpleRoomMoveDecider;
 import com.robestone.jjump.Sprite;
+import com.robestone.jjump.TextCostume;
 
 public class SwingScreen extends JComponent implements Screen {
 
@@ -58,11 +62,13 @@ public class SwingScreen extends JComponent implements Screen {
 		return getBounds(sprite).height;
 	}
 	public Rectangle getBounds(Sprite sprite) {
-		if (sprite instanceof PolygonSprite) {
-			PolygonSprite ps = (PolygonSprite) sprite;
+		Costume costume = sprite.getCostumes().getCostume();
+		Rectangle baseRectangle = null;
+		if (costume instanceof PolygonCostume) {
+			PolygonCostume pc = (PolygonCostume) costume;
 			int top = 0;
 			int bottom = 0;
-			for (int y: ps.getYPoints()) {
+			for (int y: pc.getYPoints()) {
 				if (y < top) {
 					top = y;
 				}
@@ -72,7 +78,7 @@ public class SwingScreen extends JComponent implements Screen {
 			}
 			int left = 0;
 			int right = 0;
-			for (int x: ps.getXPoints()) {
+			for (int x: pc.getXPoints()) {
 				if (x < left) {
 					left = x;
 				}
@@ -80,18 +86,28 @@ public class SwingScreen extends JComponent implements Screen {
 					right = x;
 				}
 			}
-			return new Rectangle(ps.getX(), ps.getY(), right - left, bottom - top);
-		} else if (sprite instanceof OvalSprite) {
-			OvalSprite os = (OvalSprite) sprite;
-			return new Rectangle(os.getX(), os.getY(), os.getWidth(), os.getHeight());
-		} else if (sprite instanceof ImageSprite) {
-			ImageSprite is = (ImageSprite) sprite;
+			baseRectangle = new Rectangle(pc.getX(), pc.getY(), right - left, bottom - top);
+		} else if (costume instanceof TextCostume) {
+			TextCostume tc = (TextCostume) costume;
+			Rectangle2D r2d = tc.getFont().getStringBounds(tc.getText(), tc.getX(), tc.getY(), tc.getFontRenderContext());
+			baseRectangle = new Rectangle(r2d.getBounds());
+		} else if (costume instanceof OvalCostume) {
+			OvalCostume os = (OvalCostume) costume;
+			baseRectangle = new Rectangle(os.getX(), os.getY(), os.getWidth(), os.getHeight());
+		} else if (costume instanceof ImageCostume) {
+			ImageCostume is = (ImageCostume) costume;
 			Image image = getImage(is);
-			return new Rectangle(is.getX(), is.getY(), image.getWidth(this), image.getHeight(this));
+			baseRectangle = new Rectangle(is.getX(), is.getY(), image.getWidth(this), image.getHeight(this));
 		} else {
-			throw new IllegalArgumentException("I don't recognize: " + sprite);
+			throw new IllegalArgumentException("I don't recognize: " + costume);
 		}
+		int x = sprite.getX();
+		int y = sprite.getY();
+		baseRectangle.x += x;
+		baseRectangle.y += y;
+		return baseRectangle;
 	}
+	
 
 	public void paintCycle() {
 		frame.repaint();
@@ -104,12 +120,14 @@ public class SwingScreen extends JComponent implements Screen {
 		for (Room room: gameRunner.getRooms()) {
 			Paintable paintable = room.getPaintable();
 			if (paintable instanceof PolygonPaintable) {
-				paintPolygon((PolygonPaintable) paintable, g2);
+				// TODO FIX
+				paintPolygon(null, (PolygonPaintable) paintable, g2);
 			}
 		}
 		
 		List<Rule> rules = gameRunner.getRules();
-		for (Rule rule: rules) {
+		for (int i = 0; i < rules.size(); i++) {
+			Rule rule = rules.get(i);
 			if (rule instanceof Sprite) {
 				Sprite sprite = (Sprite) rule;
 				if (sprite.isVisible()) {
@@ -125,46 +143,54 @@ public class SwingScreen extends JComponent implements Screen {
 		g2.drawRect(0, 0, frame.getWidth(), frame.getHeight());
 	}
 	private void paintSprite(Sprite sprite, Graphics2D g2) {
-		if (sprite instanceof PolygonSprite) {
-			paintPolygon((PolygonSprite) sprite, g2);
-		} else if (sprite instanceof OvalSprite) {
-			paintOval((OvalSprite) sprite, g2);
-		} else if (sprite instanceof ImageSprite) {
-			paintImageSprite((ImageSprite) sprite, g2);
+		Costume costume = sprite.getCostumes().getCostume();
+		if (costume instanceof PolygonCostume) {
+			paintPolygon(sprite, (PolygonCostume) costume, g2);
+		} else if (costume instanceof OvalCostume) {
+			paintOval(sprite, (OvalCostume) costume, g2);
+		} else if (costume instanceof TextCostume) {
+			paintText(sprite, (TextCostume) costume, g2);
+		} else if (costume instanceof ImageCostume) {
+			paintImageCostume(sprite, (ImageCostume) costume, g2);
 		}
 	}
-	private void paintImageSprite(ImageSprite sprite, Graphics2D g2) {
-		Image img1 = getImage(sprite);
-		g2.drawImage(img1, sprite.getX(), sprite.getY(), this);
+	private void paintImageCostume(Sprite sprite, ImageCostume costume, Graphics2D g2) {
+		Image img1 = getImage(costume);
+		g2.drawImage(img1, sprite.getX() + costume.getX(), sprite.getY() + costume.getY(), this);
 	}
-	private void paintOval(OvalSprite sprite, Graphics2D g2) {
-		g2.setPaint(sprite.getFillColor());
-	    g2.fillOval(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-		g2.setPaint(sprite.getBorderColor());
-		g2.setStroke(new BasicStroke(sprite.getBorderThickness()));
-	    g2.drawOval(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+	private void paintOval(Sprite sprite, OvalCostume costume, Graphics2D g2) {
+		g2.setPaint(costume.getFillColor());
+	    g2.fillOval(sprite.getX() + costume.getX(), sprite.getY() + costume.getY(), costume.getWidth(), costume.getHeight());
+		g2.setPaint(costume.getBorderColor());
+		g2.setStroke(new BasicStroke(costume.getBorderThickness()));
+	    g2.drawOval(sprite.getX() + costume.getX(), sprite.getY() + costume.getY(), costume.getWidth(), costume.getHeight());
 	}
-	private void paintPolygon(PolygonPaintable sprite, Graphics2D g2) {
-		int xd = sprite.getX();
-		int yd = sprite.getY();
-		List<Integer> x = sprite.getXPoints();
-		List<Integer> y = sprite.getYPoints();
+	private void paintPolygon(Sprite sprite, PolygonPaintable costume, Graphics2D g2) {
+		int xd = sprite.getX() + costume.getX();
+		int yd = sprite.getY() + costume.getY();
+		List<Integer> x = costume.getXPoints();
+		List<Integer> y = costume.getYPoints();
 		int[] xa = new int[x.size()];
 		int[] ya = new int[x.size()];
 		for (int i = 0; i < x.size(); i++) {
 			xa[i] = x.get(i) + xd;
 			ya[i] = y.get(i) + yd;
 		}
-		g2.setPaint(sprite.getBorderColor());
-		g2.setStroke(new BasicStroke(sprite.getBorderThickness()));
+		g2.setPaint(costume.getBorderColor());
+		g2.setStroke(new BasicStroke(costume.getBorderThickness()));
 		g2.drawPolygon(xa, ya, xa.length);
 
-		g2.setPaint(sprite.getFillColor());
+		g2.setPaint(costume.getFillColor());
 		g2.fillPolygon(xa, ya, xa.length);
 	}
-	
-	private Image getImage(ImageSprite sprite) {
-		URL imageUrl = ClassLoader.getSystemClassLoader().getResource(sprite.getCostume());
+	private void paintText(Sprite sprite, TextCostume costume, Graphics2D g2) {
+		g2.setPaint(costume.getBorderColor());
+		g2.setStroke(new BasicStroke(costume.getBorderThickness()));
+		g2.setFont(costume.getFont());
+		g2.drawString(costume.getText(), sprite.getX() + costume.getX(), sprite.getY() + costume.getY());
+	}
+	private Image getImage(ImageCostume costume) {
+		URL imageUrl = ClassLoader.getSystemClassLoader().getResource(costume.getImageName());
 		Image image = Toolkit.getDefaultToolkit().getImage(imageUrl);
 		return image;
 	}

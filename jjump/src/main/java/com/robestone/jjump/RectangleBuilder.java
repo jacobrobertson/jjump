@@ -4,28 +4,25 @@ import java.awt.Color;
 
 public class RectangleBuilder extends AbstractLooksBuilder {
 
-	private RectangleSprite rect;
+	private RectangleCostume costume;
 	
 	public RectangleBuilder(String name, SpriteBuilder parent) {
 		super(parent);
-		rect = new RectangleSprite(name);
-	}
-	
-	public RectangleSprite getSprite() {
-		return rect;
+		costume = new RectangleCostume(name);
+		parent.getSprite().getCostumes().addCostume(costume);
 	}
 	
 	public RectangleBuilder size(int width, int height) {
-		rect.initPoints(width, height);
+		costume.initPoints(width, height);
 		return this;
 	}
 	public RectangleBuilder border(int thickness, Color color) {
-		rect.setBorderColor(color);
-		rect.setBorderThickness(thickness);
+		costume.setBorderColor(color);
+		costume.setBorderThickness(thickness);
 		return this;
 	}
 	public RectangleBuilder fill(Color color) {
-		rect.setFillColor(color);
+		costume.setFillColor(color);
 		return this;
 	}
 	

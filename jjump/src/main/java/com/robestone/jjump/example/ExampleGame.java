@@ -9,7 +9,7 @@ public class ExampleGame {
 		
 		game.addRule(new PerryK());
 		game.addRule(new PerryB());
-		game.addRule(new EvilBlob());
+//		game.addRule(new EvilBlob());
 		
 		game.runGame();
 	}

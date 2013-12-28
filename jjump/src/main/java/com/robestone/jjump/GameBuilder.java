@@ -22,26 +22,37 @@ public abstract class GameBuilder {
 	}
 	
 	public RectangleBuilder rectangle(String name) {
-		SpriteBuilderImpl spriteBuilder = new SpriteBuilderImpl();
+		SpriteBuilderImpl spriteBuilder = newSpriteBuilder(name);
 		RectangleBuilder rectBuilder = new RectangleBuilder(name, spriteBuilder);
 		spriteBuilder.setLooksBuilder(rectBuilder);
 		add(spriteBuilder);
 		return rectBuilder;
 	}
+	public TextBuilder text(String text) {
+		SpriteBuilderImpl spriteBuilder = newSpriteBuilder(text);
+		TextBuilder costumeBuilder = new TextBuilder(spriteBuilder, text);
+		spriteBuilder.setLooksBuilder(costumeBuilder);
+		add(spriteBuilder);
+		return costumeBuilder;
+	}
 	public TriangleBuilder triangle(String name) {
-		SpriteBuilderImpl spriteBuilder = new SpriteBuilderImpl();
+		SpriteBuilderImpl spriteBuilder = newSpriteBuilder(name);
 		TriangleBuilder looksBuilder = new TriangleBuilder(name, spriteBuilder);
 		spriteBuilder.setLooksBuilder(looksBuilder);
 		add(spriteBuilder);
 		return looksBuilder;
 	}
 	public OvalBuilder oval(String name) {
-		
-		SpriteBuilderImpl spriteBuilder = new SpriteBuilderImpl();
-		OvalBuilder ovalBuilder = new OvalBuilder(name, spriteBuilder);
+		SpriteBuilderImpl spriteBuilder = newSpriteBuilder(name);
+		OvalBuilder ovalBuilder = new OvalBuilder(spriteBuilder);
 		spriteBuilder.setLooksBuilder(ovalBuilder);
 		add(spriteBuilder);
 		return ovalBuilder;
+	}
+	private SpriteBuilderImpl newSpriteBuilder(String name) {
+		Sprite sprite = new SimpleSprite(name);
+		SpriteBuilderImpl spriteBuilder = new SpriteBuilderImpl(sprite);
+		return spriteBuilder;
 	}
 	private SpriteBuilder add(SpriteBuilder builder) {
 		game.addRule(builder.getSprite());
@@ -52,14 +63,6 @@ public abstract class GameBuilder {
 	public MovementBuilder move(String name) {
 		SpriteBuilder old = builders.get(name);
 		return old.movesLike();
-//		if (old instanceof MovementBuilder) {
-//			return (MovementBuilder) old;
-//		} else {
-//			MoveableSprite sprite = (MoveableSprite) old.getSprite();
-//			MovementBuilder newBuilder = new MovementBuilder(sprite);
-//			builders.put(name, newBuilder);
-//			return newBuilder;
-//		}
 	}
 	public MovementBuilder position(String name) {
 		return move(name);

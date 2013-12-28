@@ -4,29 +4,26 @@ import java.awt.Color;
 
 public class OvalBuilder extends AbstractLooksBuilder {
 
-	private OvalSprite oval;
+	private OvalCostume costume;
 	
-	public OvalBuilder(String name, SpriteBuilder parent) {
+	public OvalBuilder(SpriteBuilder parent) {
 		super(parent);
-		oval = new OvalSprite(name);
-	}
-	
-	public OvalSprite getSprite() {
-		return oval;
+		costume = new OvalCostume(parent.getSprite().getName());
+		parent.getSprite().getCostumes().addCostume(costume);
 	}
 	
 	public OvalBuilder size(int width, int height) {
-		oval.setWidth(width);
-		oval.setHeight(height);
+		costume.setWidth(width);
+		costume.setHeight(height);
 		return this;
 	}
 	public OvalBuilder border(int thickness, Color color) {
-		oval.setBorderColor(color);
-		oval.setBorderThickness(thickness);
+		costume.setBorderColor(color);
+		costume.setBorderThickness(thickness);
 		return this;
 	}
 	public OvalBuilder fill(Color color) {
-		oval.setFillColor(color);
+		costume.setFillColor(color);
 		return this;
 	}
 	

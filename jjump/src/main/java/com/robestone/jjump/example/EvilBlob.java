@@ -1,12 +1,10 @@
 package com.robestone.jjump.example;
 
-import java.util.List;
-import java.util.Random;
 
-import com.robestone.jjump.EdgeBehavior;
-import com.robestone.jjump.PolygonSprite;
-
-public class EvilBlob extends PolygonSprite {
+public class EvilBlob {
+	/*
+	extends PolygonSprite {
+}
 	
 	private Random random = new Random();
 	
@@ -45,5 +43,5 @@ public class EvilBlob extends PolygonSprite {
 	public void ifTyped_Space() {
 		addPoint(9, 9);
 	}
-
+*/
 }

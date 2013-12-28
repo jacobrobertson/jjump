@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SimpleRoom implements Room, PolygonPaintable {
 
-	private PolygonSprite paintable;
+	private PolygonCostume paintable;
 	private Rectangle bounds;
 	private MoveDecider moveDecider;
 	
@@ -16,7 +16,7 @@ public class SimpleRoom implements Room, PolygonPaintable {
 			int borderThickness, Color borderColor, Color fillColor
 			) {
 		bounds = new Rectangle(x, y, width, height);
-		paintable = new PolygonSprite(name, borderThickness, borderColor, fillColor);
+		paintable = new PolygonCostume(name, borderThickness, borderColor, fillColor);
 		paintable.addPoint(x, y);
 		paintable.addPoint(x + width, y);
 		paintable.addPoint(x + width, y + height);

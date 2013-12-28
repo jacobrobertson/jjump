@@ -4,17 +4,20 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import com.robestone.jjump.EdgeBehavior;
-import com.robestone.jjump.PolygonSprite;
+import com.robestone.jjump.PolygonCostume;
 import com.robestone.jjump.Room;
+import com.robestone.jjump.SimpleSprite;
 
-public class JezecPoly extends PolygonSprite {
+public class JezecPoly extends SimpleSprite {
 
 	public JezecPoly(String name) {
 		super(name);
-		addPoint(5, 10);
-		addPoint(20, 10);
-		addPoint(50, 25);
-		addPoint(4, 20);
+		PolygonCostume costume = new PolygonCostume(name);
+		costume.addPoint(5, 10);
+		costume.addPoint(20, 10);
+		costume.addPoint(50, 25);
+		costume.addPoint(4, 20);
+		getCostumes().addCostume(costume);
 		setVelocity(5, 4);
 		setMoveKeys(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN, true);
 		setEdgeBehavior(EdgeBehavior.Bounce);

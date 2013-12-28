@@ -12,6 +12,14 @@ public class ExampleGameBuilder extends GameBuilder {
 	
 	@Override
 	public void build() {
+		
+		text("Hello Family!")
+			.movesLike()
+				.moveTo(100, 50)
+				.speed(1, 3)
+				.bounce()
+				;
+		
 		rectangle("Present")
 				.size(60, 100)
 				.border(4, Color.blue)

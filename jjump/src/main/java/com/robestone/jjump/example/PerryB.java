@@ -18,9 +18,9 @@ public class PerryB extends SimpleSprite {
 	}
 	public void foreverDieOnBlob() {
 		if (getSensor().isTouching("Perry Bounce", "Evil Blob")) {
-			setCostume("Perry_the_dead_platypus.gif");
+			getCostumes().setCostume("Perry_the_dead_platypus.gif");
 		} else {
-			setCostume("Perry_the_platypus.gif");
+			getCostumes().setCostume("Perry_the_platypus.gif");
 		}
 	}
 

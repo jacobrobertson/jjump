@@ -2,6 +2,6 @@ package com.robestone.jjump;
 
 public enum EdgeBehavior {
 
-	Bounce, Stick, Continue
+	Bounce, Stick, Continue, Wrap
 	
 }

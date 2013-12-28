@@ -15,9 +15,9 @@ public class PerryK extends SimpleSprite {
 	}
 	public void foreverShoes() {
 		if (getSensor().isKeyPressed(KeyEvent.VK_SPACE)) {
-			setCostume("Perry_and_shoes.gif");
+			getCostumes().setCostume("Perry_and_shoes.gif");
 		} else {
-			setCostume("Perry_the_platypus.gif");
+			getCostumes().setCostume("Perry_the_platypus.gif");
 		}
 	}
 	public void foreverShow() {

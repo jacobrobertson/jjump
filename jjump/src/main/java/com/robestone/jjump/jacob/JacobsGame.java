@@ -30,7 +30,7 @@ public class JacobsGame {
 		game.addRule(new PolyJacob("jacob4", 7, 1));
 		game.addRule(new PolyJacob("jacob5", 1, 1));
 		
-		game.addRule(new JozenPoly("jozen1"));
+//		game.addRule(new JozenPoly("jozen1"));
 		
 //		game.addRule(new JezecPoly("JezecPoly"));
 //		game.addRule(new JozenPoly("JozenPoly"));

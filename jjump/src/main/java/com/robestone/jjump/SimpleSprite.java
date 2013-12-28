@@ -7,7 +7,7 @@ import java.util.List;
  * A very basic sprite that simply keeps track of the position.
  * @author jacob
  */
-public class SimpleSprite implements MoveableSprite, ImageSprite {
+public class SimpleSprite implements MoveableSprite {
 
 	private int x;
 	private int y;
@@ -20,20 +20,25 @@ public class SimpleSprite implements MoveableSprite, ImageSprite {
 	private SpriteXYMove spriteXYMove = new SpriteXYMove();
 
 	private String name;
-	private String costume;
 	
 	private boolean visible = true;
 	
 	private List<CycleAction> actions = new ArrayList<CycleAction>();
 	private GameRunner runner;
+	private Costumes costumes = new Costumes();
 	
+	public SimpleSprite(String name) {
+		this(name, name);
+	}
 	public SimpleSprite(String name, String costume) {
 		this.name = name;
-		this.costume = costume;
+		costumes.setCostume(costume);
 		this.spriteXYMove.sprite = this;
 		this.spriteXYMove.edgeBehavior = EdgeBehavior.Stick;
 	}
-	
+	public Costumes getCostumes() {
+		return costumes;
+	}
 	public GameRunner getGameRunner() {
 		return runner;
 	}
@@ -83,19 +88,12 @@ public class SimpleSprite implements MoveableSprite, ImageSprite {
 		
 		this.x = spriteXYMove.newX;
 		this.y = spriteXYMove.newY;
-		
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setCostume(String costume) {
-		this.costume = costume;
-	}
-	public String getCostume() {
-		return costume;
-	}
 	public int getXVelocity() {
 		return xVelocity;
 	}

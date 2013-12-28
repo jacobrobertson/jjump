@@ -14,5 +14,7 @@ public interface Sprite extends Rule, Paintable {
 	 * For most Sprite implementations, this will be the file name.
 	 */
 	String getName();
+	
+	Costumes getCostumes();
 
 }

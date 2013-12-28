@@ -5,9 +5,11 @@ public class SpriteBuilderImpl implements SpriteBuilder {
 
 	private MovementBuilder movementBuilder;
 	private LooksBuilder looksBuilder;
+	private Sprite sprite;
 	
-	public SpriteBuilderImpl() {
+	public SpriteBuilderImpl(Sprite sprite) {
 		this.movementBuilder = new MovementBuilderImpl(this);
+		this.sprite = sprite;
 	}
 	public void setLooksBuilder(LooksBuilder looksBuilder) {
 		this.looksBuilder = looksBuilder;
@@ -16,7 +18,7 @@ public class SpriteBuilderImpl implements SpriteBuilder {
 		return getSprite().getName();
 	}
 	public Sprite getSprite() {
-		return looksBuilder.getSprite();
+		return sprite;
 	}
 	public SpriteBuilder getSpriteBuilder() {
 		return this;
