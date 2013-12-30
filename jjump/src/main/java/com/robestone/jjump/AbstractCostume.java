@@ -1,6 +1,8 @@
 package com.robestone.jjump;
 
-public abstract class AbstractCostume implements Costume {
+import com.robestone.jjump.command.Positionable;
+
+public abstract class AbstractCostume implements Costume, Positionable {
 
 	private String name;
 	private boolean visible;
@@ -35,5 +37,8 @@ public abstract class AbstractCostume implements Costume {
 	public String getName() {
 		return name;
 	}
-
+	public void position(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 }

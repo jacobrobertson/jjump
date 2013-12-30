@@ -1,19 +1,18 @@
 package com.robestone.jjump.command;
 
-public class PositionCommand implements Command {
+public class PositionCommand extends AbstractCommand {
 
-	private Positionable receiver;
 	private int x;
 	private int y;
 	
-	public PositionCommand(Positionable receiver, int x, int y) {
-		this.receiver = receiver;
+	public PositionCommand(Receiver receiver, int x, int y) {
+		super(receiver);
 		this.x = x;
 		this.y = y;
 	}
 
 	public void execute() {
-		receiver.position(x, y);
+		((Positionable) getDelegate()).position(x, y);
 	}
 	
 }

@@ -1,19 +1,18 @@
 package com.robestone.jjump.command;
 
-public class SizeCommand implements Command {
+public class SizeCommand extends AbstractCommand {
 
-	private Sizeable receiver;
 	private int width;
 	private int height;
 	
-	public SizeCommand(Sizeable receiver, int width, int height) {
-		this.receiver = receiver;
+	public SizeCommand(Receiver receiver, int width, int height) {
+		super(receiver);
 		this.width = width;
 		this.height = height;
 	}
 
 	public void execute() {
-		receiver.size(width, height);
+		((Sizeable) getDelegate()).size(width, height);
 	}
 	
 }
